@@ -18,53 +18,35 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways">
+            app:layout_scrollFlags="scroll|enterAlways"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            >
 
             <ImageView
-                android:id="@+id/live"
+                android:id="@+id/image"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="5dp"
-                android:src="@drawable/live_button" />
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ic_search" />
 
-            <RelativeLayout
+            <EditText
+                android:id="@+id/editText"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_toLeftOf="@id/live"
-                android:background="@color/searchmenu">
-
-
-                <ImageView
-                    android:id="@+id/search"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:src="@drawable/ic_search" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:layout_toRightOf="@id/search"
-                    android:text="搜索话题、问题或人"
-                    android:textSize="16sp" />
-
-            </RelativeLayout>
-
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:maxLines="1"
+                android:layout_toRightOf="@id/image"
+                android:hint="@string/search"
+                android:textSize="16sp"
+                android:clickable="true"/>
 
         </RelativeLayout>
 
 
     </android.support.design.widget.AppBarLayout>
-
-
-
-
 
     <FrameLayout
         android:id="@+id/content"
@@ -109,17 +91,6 @@
                 android:background="#00000000"
                 android:button="@null"
                 android:drawableTop="@drawable/explore_sel"
-                android:gravity="center|bottom"
-                android:paddingTop="5dp" />
-
-            <RadioButton
-                android:id="@+id/notify_tab"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="#00000000"
-                android:button="@null"
-                android:drawableTop="@drawable/notify_sel"
                 android:gravity="center|bottom"
                 android:paddingTop="5dp" />
 

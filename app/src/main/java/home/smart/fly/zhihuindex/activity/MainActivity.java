@@ -1,17 +1,16 @@
-package home.smart.fly.zhihuindex;
+package home.smart.fly.zhihuindex.activity;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.text.InputType;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
@@ -20,6 +19,7 @@ import android.widget.RadioGroup;
 import java.util.ArrayList;
 import java.util.List;
 
+import home.smart.fly.zhihuindex.R;
 import home.smart.fly.zhihuindex.adapter.FragmentTabAdapter;
 import home.smart.fly.zhihuindex.fragments.FourFragment;
 import home.smart.fly.zhihuindex.fragments.IndexFragment;
@@ -64,6 +64,23 @@ public class MainActivity extends FragmentActivity {
         index_tab = (RadioButton) findViewById(R.id.home_tab);
 
         editText =(EditText)findViewById(R.id.editText);
+        editText.setFocusable(false);
+        editText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                Log.d("Activity","11111111111111111111111111111111111111");
+                intent.setClass(MainActivity.this,SearchActivity.class);
+                startActivity(intent);
+            }
+        });
+       /* editText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return false;
+            }
+        });*/
+
 
         fragments.add(new IndexFragment());
         fragments.add(new SecondFragment());
