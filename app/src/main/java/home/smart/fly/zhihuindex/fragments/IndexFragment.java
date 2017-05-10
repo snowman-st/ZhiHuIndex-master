@@ -65,11 +65,10 @@ public class IndexFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (Math.abs(dy) > 5) {
-                    if (dy > 0) {
-                        fam.hideMenu(true);
-                    } else {
-                        fam.showMenu(true);
-                    }
+                    //隐藏
+                    if (dy > 0) fam.hideMenu(true);
+                    //显示
+                    else fam.showMenu(true);
                 }
             }
         });

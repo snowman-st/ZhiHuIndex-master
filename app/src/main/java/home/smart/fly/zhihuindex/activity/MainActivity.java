@@ -69,18 +69,10 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                Log.d("Activity","11111111111111111111111111111111111111");
                 intent.setClass(MainActivity.this,SearchActivity.class);
                 startActivity(intent);
             }
         });
-       /* editText.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                return false;
-            }
-        });*/
-
 
         fragments.add(new IndexFragment());
         fragments.add(new SecondFragment());
@@ -91,7 +83,6 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void OnRgsExtraCheckedChanged(RadioGroup radioGroup, int checkedId, int index) {
                 super.OnRgsExtraCheckedChanged(radioGroup, checkedId, index);
-                Log.e("CheckedChanged", "-----" + index);
                 currentIndex = index;
                 resetView();
                 switch (index) {
@@ -111,10 +102,6 @@ public class MainActivity extends FragmentActivity {
 
             }
         });
-
-
-
-
     }
 
     private void resetView() {
