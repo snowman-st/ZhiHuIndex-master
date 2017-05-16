@@ -39,6 +39,7 @@
         fab:menu_shadowColor="#444">
 
         <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/ask_question"
             style="@style/MenuButtonsSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

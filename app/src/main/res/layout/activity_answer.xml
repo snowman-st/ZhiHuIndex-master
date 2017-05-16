@@ -3,33 +3,17 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <TextView
+        android:id="@+id/problem_present"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="9">
+        android:layout_height="wrap_content"
+        android:lineSpacingExtra="2dp">
+    </TextView>
 
-        <TextView
-            android:id="@+id/news_item_content_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:lineSpacingExtra="2dp"
-            />
-    </ScrollView>
-
-    <LinearLayout
+    <ListView
+        android:id="@+id/answer_list"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="9"
-            android:hint="@string/comment"
-            />
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/send"/>
-    </LinearLayout>
+        android:layout_height="wrap_content">
+    </ListView>
+
 </LinearLayout>

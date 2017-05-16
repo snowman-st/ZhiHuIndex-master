@@ -1,6 +1,7 @@
 package home.smart.fly.zhihuindex.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -12,12 +13,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import home.smart.fly.zhihuindex.R;
+import home.smart.fly.zhihuindex.activity.ProblemCommitActivity;
 import home.smart.fly.zhihuindex.adapter.IndexRecyclerViewAdapter;
 
 public class IndexFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -28,7 +31,7 @@ public class IndexFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     //
     private View rootView;
     private FloatingActionMenu fam;
-
+    private FloatingActionButton askQuestion;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -44,11 +47,26 @@ public class IndexFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     private void InitView() {
+        //悬浮按钮
         fam = (FloatingActionMenu) rootView.findViewById(R.id.menu_yellow);
+        //提问
+        askQuestion =(FloatingActionButton)rootView.findViewById(R.id.ask_question);
+        askQuestion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(getActivity(),ProblemCommitActivity.class);
+                startActivity(intent);
+            }
+        });
+
         View headView = LayoutInflater.from(mContext).inflate(R.layout.index_list_headview, null);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh);
+        //进度条颜色
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
+        //进度条位置
         swipeRefreshLayout.setProgressViewOffset(false, 0, (int) (mContext.getResources().getDisplayMetrics().density * 64));
+        //监听器
         swipeRefreshLayout.setOnRefreshListener(this);
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
@@ -63,6 +81,7 @@ public class IndexFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                //悬浮按钮，上滑隐藏，下滑显现
                 super.onScrolled(recyclerView, dx, dy);
                 if (Math.abs(dy) > 5) {
                     //隐藏
@@ -83,6 +102,7 @@ public class IndexFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                //刷新时间2s，
                 swipeRefreshLayout.setRefreshing(false);
             }
         }, 2000);
