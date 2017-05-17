@@ -76,13 +76,14 @@ public class IndexRecyclerViewAdapter extends RecyclerView.Adapter<IndexRecycler
         }
         //加载图片
         Glide.with(mContext).load(Constant.headPics.get(pos % 3)).placeholder(R.drawable.profile).into(holder.profile_pic);
-        Glide.with(mContext).load(Constant.itemPics.get(pos % 3)).placeholder(R.drawable.cardpic).into(holder.pic);
+        //Glide.with(mContext).load(Constant.itemPics.get(pos % 3)).placeholder(R.drawable.cardpic).into(holder.pic);
         //menu点击事件
         holder.menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ListItemMenu menu = new ListItemMenu(menuW, menuH, mContext);
                 menu.update();
+                //用于显示悬浮按钮
                 int offx = ScreenUtil.dip2px(mContext, 24);
                 int offy = ScreenUtil.dip2px(mContext, 24);
                 menu.setAnimationStyle(R.style.MenuAnim);
@@ -109,6 +110,14 @@ public class IndexRecyclerViewAdapter extends RecyclerView.Adapter<IndexRecycler
         return headView == null ? datas.size() : datas.size() + 1;
     }
 
+    //刷新更新数据
+    public void addItem(List<String> newDatas){
+           newDatas.addAll(datas);
+           datas.removeAll(newDatas);
+           datas.addAll(newDatas);
+           notifyDataSetChanged();
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView text;
         ImageView menu;
@@ -123,7 +132,6 @@ public class IndexRecyclerViewAdapter extends RecyclerView.Adapter<IndexRecycler
             text = (TextView) itemView.findViewById(R.id.text);
             menu = (ImageView) itemView.findViewById(R.id.menu);
             profile_pic = (CircleImageView) itemView.findViewById(R.id.profile_image);
-            pic = (ImageView) itemView.findViewById(R.id.pic);
             normalShell = (LinearLayout) itemView.findViewById(R.id.normalList);
             liveList = (RecyclerView) itemView.findViewById(R.id.liveList);
         }
