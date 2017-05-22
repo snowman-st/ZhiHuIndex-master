@@ -27,6 +27,7 @@ import home.smart.fly.zhihuindex.widget.ListItemMenu;
  * Created by co-mall on 2016/9/13.
  */
 public class IndexRecyclerViewAdapter extends RecyclerView.Adapter<IndexRecyclerViewAdapter.MyViewHolder> {
+    //用于区别RecycleView与其他控件
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_NORMAL = 1;
     private View headView;
@@ -44,7 +45,6 @@ public class IndexRecyclerViewAdapter extends RecyclerView.Adapter<IndexRecycler
         mActivity.getWindowManager().getDefaultDisplay().getMetrics(display);
         menuW = display.widthPixels / 2;
         menuH = LinearLayout.LayoutParams.WRAP_CONTENT;
-
     }
 
     @Override
@@ -53,13 +53,12 @@ public class IndexRecyclerViewAdapter extends RecyclerView.Adapter<IndexRecycler
             return new MyViewHolder(headView);
         }
 
-
         View view = LayoutInflater.from(mContext).inflate(R.layout.index_list_item, null);
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
     }
 
-
+    //绑定数据
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         if (getItemViewType(position) == TYPE_HEADER) {
@@ -67,33 +66,31 @@ public class IndexRecyclerViewAdapter extends RecyclerView.Adapter<IndexRecycler
         }
 
         final int pos = getRealPosition(holder);
-
-        if (pos == 1) {
+        //隐藏与显现数据
+        if (pos == 1){
             holder.liveList.setVisibility(View.VISIBLE);
             holder.normalShell.setVisibility(View.GONE);
         } else {
             holder.liveList.setVisibility(View.GONE);
             holder.normalShell.setVisibility(View.VISIBLE);
         }
-
-
-//        holder.text.setText(datas.get(pos));
-
+        //加载图片
         Glide.with(mContext).load(Constant.headPics.get(pos % 3)).placeholder(R.drawable.profile).into(holder.profile_pic);
-        Glide.with(mContext).load(Constant.itemPics.get(pos % 3)).placeholder(R.drawable.cardpic).into(holder.pic);
-
+        //Glide.with(mContext).load(Constant.itemPics.get(pos % 3)).placeholder(R.drawable.cardpic).into(holder.pic);
+        //menu点击事件
         holder.menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ListItemMenu menu = new ListItemMenu(menuW, menuH, mContext);
                 menu.update();
+                //用于显示悬浮按钮
                 int offx = ScreenUtil.dip2px(mContext, 24);
                 int offy = ScreenUtil.dip2px(mContext, 24);
                 menu.setAnimationStyle(R.style.MenuAnim);
                 menu.showAsDropDown(holder.menu, -menuW + offx, -offy);
             }
         });
-
+        //横向列表
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
         manager.setOrientation(LinearLayoutManager.HORIZONTAL);
         holder.liveList.setLayoutManager(manager);
@@ -113,6 +110,14 @@ public class IndexRecyclerViewAdapter extends RecyclerView.Adapter<IndexRecycler
         return headView == null ? datas.size() : datas.size() + 1;
     }
 
+    //刷新更新数据
+    public void addItem(List<String> newDatas){
+           newDatas.addAll(datas);
+           datas.removeAll(newDatas);
+           datas.addAll(newDatas);
+           notifyDataSetChanged();
+    }
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView text;
         ImageView menu;
@@ -127,11 +132,11 @@ public class IndexRecyclerViewAdapter extends RecyclerView.Adapter<IndexRecycler
             text = (TextView) itemView.findViewById(R.id.text);
             menu = (ImageView) itemView.findViewById(R.id.menu);
             profile_pic = (CircleImageView) itemView.findViewById(R.id.profile_image);
-            pic = (ImageView) itemView.findViewById(R.id.pic);
             normalShell = (LinearLayout) itemView.findViewById(R.id.normalList);
             liveList = (RecyclerView) itemView.findViewById(R.id.liveList);
         }
     }
+
 
     public void setHeadView(View view) {
         headView = view;

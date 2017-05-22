@@ -8,5 +8,5 @@
     <color name="white">#ffffff</color>
     <color name="gray">#EDEFF2</color>
     <color name="transparent">#00000000</color>
-    <color name="menubackground">#FAFAFA</color>
+    <color name="menu_background">#FAFAFA</color>
 </resources>
