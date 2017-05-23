@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,17 +21,21 @@ import com.github.clans.fab.FloatingActionMenu;
 
 import net.HttpUtil;
 
-import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import home.smart.fly.zhihuindex.R;
+import home.smart.fly.zhihuindex.activity.AnswerActivity;
 import home.smart.fly.zhihuindex.activity.ProblemCommitActivity;
 import home.smart.fly.zhihuindex.adapter.IndexRecyclerViewAdapter;
+import home.smart.fly.zhihuindex.Problem;
+import home.smart.fly.zhihuindex.util.GsonTool;
 
 public class IndexFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    public static final int UPDATE =1;
+    private  final int UPDATE =1;
     private Context mContext;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
@@ -39,6 +44,8 @@ public class IndexFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     private View rootView;
     private FloatingActionMenu fam;
     private FloatingActionButton askQuestion;
+    private List<Problem> recommendedProblemList = new ArrayList<Problem>();
+    private Problem problem;
 
     private Handler handler = new Handler(){
         @Override
@@ -47,11 +54,13 @@ public class IndexFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             switch (msg.what){
                 //UI更新
                 case UPDATE:
-
+                    adapter.notifyDataSetChanged();
+                    msg.what=0;
                     break;
             }
         }
     };
+    //重写方法
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -71,6 +80,7 @@ public class IndexFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         fam = (FloatingActionMenu) rootView.findViewById(R.id.menu_yellow);
         //提问
         askQuestion =(FloatingActionButton)rootView.findViewById(R.id.ask_question);
+        //点击跳转
         askQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,25 +89,40 @@ public class IndexFragment extends Fragment implements SwipeRefreshLayout.OnRefr
                 startActivity(intent);
             }
         });
-
         View headView = LayoutInflater.from(mContext).inflate(R.layout.index_list_headview, null);
         swipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh);
-        //进度条颜色
+        //进度条颜色(总共4种)
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
         //进度条位置
         swipeRefreshLayout.setProgressViewOffset(false, 0, (int) (mContext.getResources().getDisplayMetrics().density * 64));
         //监听器
         swipeRefreshLayout.setOnRefreshListener(this);
+        //设置recyclerView
         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerview);
         LinearLayoutManager manager = new LinearLayoutManager(mContext);
         recyclerView.setLayoutManager(manager);
-        List<String> datas = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            datas.add("This is item " + i);
+        for (int i = 0; i < 5; i++) {
+            problem = new Problem(1,"zl","xidian",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),1,1,1,"happy",true);
+            recommendedProblemList.add(problem);
         }
-        adapter = new IndexRecyclerViewAdapter(mContext, datas);
+        adapter = new IndexRecyclerViewAdapter(mContext, recommendedProblemList);
+        //设置headView
         adapter.setHeadView(headView);
+        //设置adapter
         recyclerView.setAdapter(adapter);
+        //实现点击数据
+        adapter.setItemClickListener(new IndexRecyclerViewAdapter.MyItemClickListener(){
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent();
+                problem = recommendedProblemList.get(position);
+                Bundle bundle = new Bundle();
+                bundle.putString("AnswerActivity",GsonTool.createProblemJsonString(problem));
+                intent.setClass(getActivity(), AnswerActivity.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -113,35 +138,40 @@ public class IndexFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         });
     }
 
-    //刷新
+    //下拉刷新
     @Override
     public void onRefresh() {
-        new Handler().postDelayed(new Runnable() {
+        new Handler().post(new Runnable() {
             @Override
             public void run() {
-//                List<String> newDatas = new ArrayList<String>();
-//                for (int i = 0; i <5; i++) {
-//                    int index = i + 1;
-//                    newDatas.add("new item" + index);
-//                }
-//                adapter.addItem(newDatas);
-                HttpURLConnection connection;
                 try{
-                    URL url = new URL("");
-                    connection = (HttpURLConnection)url.openConnection();
-                    connection.setRequestMethod("GET");
-                    HttpUtil httpUtil = new HttpUtil();
-
+                    URL url = new URL("http://192.168.1.106:8080/HelloServer/servlet/LoginServlet");
+                    //新建List<Problem>,用于传输数据
+                    List<Problem> newProblemList = new ArrayList<Problem>();
+                    newProblemList.add(new Problem(1,null,null,new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),0,0,0,"home_page",true));
+                    //转换为json
+                    String list = GsonTool.createListJsonString(newProblemList);
+                    //获得反馈
+                    newProblemList = HttpUtil.sendWithHttp(url,list);
+                    Log.v("IndexFragment",GsonTool.createListJsonString(newProblemList));
+                    if(newProblemList!=null&&newProblemList.size()>0){
+                        Log.v("IndexFragment",GsonTool.createListJsonString(newProblemList));
+                        //加入从服务器获得的数据
+                        recommendedProblemList.addAll(0,newProblemList);
+                        Message message = new Message();
+                        message.what=UPDATE;
+                        //发送message对象
+                        handler.sendMessage(message);
+                        Toast.makeText(getActivity(), "更新了十条数据...", Toast.LENGTH_SHORT).show();
+                    }
+                    else Toast.makeText(getActivity(), "无法更新", Toast.LENGTH_SHORT).show();
                 }catch(Exception e){
                     e.printStackTrace();
                 }
-                swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(getActivity(), "更新了五条数据...", Toast.LENGTH_SHORT).show();
-
-                //刷新时间2s，
+                finally {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
             }
-        }, 2000);
+        });
     }
-
-
 }

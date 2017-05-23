@@ -13,29 +13,34 @@ import android.widget.EditText;
 
 import net.HttpUtil;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import home.smart.fly.zhihuindex.R;
 import home.smart.fly.zhihuindex.util.GsonTool;
-import home.smart.fly.zhihuindex.util.Problem;
+import home.smart.fly.zhihuindex.Problem;
 
 /**
  * Created by zl on 2017/5/15.
  */
 
 public class ProblemCommitActivity extends AppCompatActivity{
-    private EditText problem_editText;
+    private EditText problemContentEditText;
+    private EditText problemTitleEditText;
     private Toolbar toolbar;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.problem_commit);
+        setContentView(R.layout.activity_problem_commit);
         initView();
         setSupportActionBar(toolbar);
     }
 
     private void initView() {
-        problem_editText=(EditText)findViewById(R.id.problem);
+        problemContentEditText=(EditText)findViewById(R.id.problem_content);
+        problemTitleEditText=(EditText)findViewById(R.id.problem_title);
         toolbar=(Toolbar)findViewById(R.id.toolbar);
     }
 
@@ -56,15 +61,17 @@ public class ProblemCommitActivity extends AppCompatActivity{
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //获得内容
-                        String problemContent = problem_editText.getText().toString();
+                        String pContent = problemContentEditText.getText().toString();
+                        String pTitle = problemTitleEditText.getText().toString();
                         //转换为Json
-                        Problem problem = new Problem(0,problemContent,null,new Date(),0,0,0,null,true);
-                        String commit = GsonTool.createJsonString(problem);
+                        Problem problem = new Problem(0,pContent,pTitle,new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),0,0,1,null,false);
+                        List<Problem> problemList = new ArrayList<Problem>();
+                        problemList.add(problem);
+                        String commit = GsonTool.createListJsonString(problemList);
                         Log.v("ProblemCommitActivity",commit);
                         try{
                             URL url = new URL("http://192.168.1.107:8080/HelloServer/servlet/LoginServlet");
-                            HttpUtil httpUtil = new HttpUtil();
-                            httpUtil.sendWithHttp(url,commit);
+                            HttpUtil.sendWithHttp(url,commit);
                         }catch (Exception e){
                             e.printStackTrace();
                         }

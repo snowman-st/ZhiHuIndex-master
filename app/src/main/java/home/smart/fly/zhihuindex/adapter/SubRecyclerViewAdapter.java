@@ -45,7 +45,6 @@ public class SubRecyclerViewAdapter extends RecyclerView.Adapter<SubRecyclerView
             return new MyViewHolder(headView);
         }
 
-
         View view = LayoutInflater.from(mContext).inflate(R.layout.sub_list_item, null);
         MyViewHolder holder = new MyViewHolder(view);
         return holder;
@@ -57,13 +56,7 @@ public class SubRecyclerViewAdapter extends RecyclerView.Adapter<SubRecyclerView
         if (getItemViewType(position) == TYPE_HEADER) {
             return;
         }
-
         final int pos = getRealPosition(holder);
-
-
-//        holder.text.setText(datas.get(pos));
-
-
     }
 
     @Override

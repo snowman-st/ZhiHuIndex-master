@@ -22,7 +22,7 @@ import static home.smart.fly.zhihuindex.R.id.headview;
  * Created by engineer on 2016/9/21.
  */
 
-public class FourFragment extends Fragment {
+public class SettingFragment extends Fragment {
     private View rootView;
     private Context mContext;
     private CollapsingToolbarLayout collapsing_toolbar;

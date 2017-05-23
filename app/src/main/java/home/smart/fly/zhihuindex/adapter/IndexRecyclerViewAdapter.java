@@ -2,7 +2,6 @@ package home.smart.fly.zhihuindex.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -20,63 +19,72 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import home.smart.fly.zhihuindex.Constant;
 import home.smart.fly.zhihuindex.R;
+import home.smart.fly.zhihuindex.Problem;
 import home.smart.fly.zhihuindex.util.ScreenUtil;
 import home.smart.fly.zhihuindex.widget.ListItemMenu;
 
 /**
  * Created by co-mall on 2016/9/13.
  */
-public class IndexRecyclerViewAdapter extends RecyclerView.Adapter<IndexRecyclerViewAdapter.MyViewHolder> {
-    //用于区别RecycleView与其他控件
+public class IndexRecyclerViewAdapter extends RecyclerView.Adapter<IndexRecyclerViewAdapter.MyViewHolder>{
+    //用于区别HeadView
     private static final int TYPE_HEADER = 0;
     private static final int TYPE_NORMAL = 1;
+    //设置HeadView以匹配
     private View headView;
 
-    private List<String> datas = new ArrayList<>();
+    private List<Problem> problemList = new ArrayList<Problem>();
     private Context mContext;
 
     private int menuW, menuH;
 
-    public IndexRecyclerViewAdapter(Context mContext, List<String> datas) {
-        this.datas = datas;
+    private MyItemClickListener mItemClickListener;
+
+    public IndexRecyclerViewAdapter(Context mContext, List<Problem> newProblems) {
+        this.problemList = newProblems;
         this.mContext = mContext;
         DisplayMetrics display = new DisplayMetrics();
         Activity mActivity = (Activity) mContext;
         mActivity.getWindowManager().getDefaultDisplay().getMetrics(display);
+        //用于显示浮动按钮
         menuW = display.widthPixels / 2;
         menuH = LinearLayout.LayoutParams.WRAP_CONTENT;
     }
 
+    //自定义点击接口
+    public interface MyItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    /**
+     * 在activity里面adapter就是调用的这个方法,将点击事件监听传递过来,并赋值给全局的监听
+     *
+     * @param myItemClickListener
+     */
+    public void setItemClickListener(MyItemClickListener myItemClickListener) {
+        this.mItemClickListener = myItemClickListener;
+    }
+    //创建ViewHolder实例
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (headView != null && viewType == TYPE_HEADER) {
-            return new MyViewHolder(headView);
+            return new MyViewHolder(headView,mItemClickListener);
         }
-
         View view = LayoutInflater.from(mContext).inflate(R.layout.index_list_item, null);
-        MyViewHolder holder = new MyViewHolder(view);
+        MyViewHolder holder = new MyViewHolder(view,mItemClickListener);
         return holder;
     }
 
-    //绑定数据
+    //加载绑定数据
+    //用于对RecycleView数据进行赋值
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         if (getItemViewType(position) == TYPE_HEADER) {
             return;
         }
-
         final int pos = getRealPosition(holder);
-        //隐藏与显现数据
-        if (pos == 1){
-            holder.liveList.setVisibility(View.VISIBLE);
-            holder.normalShell.setVisibility(View.GONE);
-        } else {
-            holder.liveList.setVisibility(View.GONE);
-            holder.normalShell.setVisibility(View.VISIBLE);
-        }
         //加载图片
         Glide.with(mContext).load(Constant.headPics.get(pos % 3)).placeholder(R.drawable.profile).into(holder.profile_pic);
-        //Glide.with(mContext).load(Constant.itemPics.get(pos % 3)).placeholder(R.drawable.cardpic).into(holder.pic);
         //menu点击事件
         holder.menu.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,12 +98,10 @@ public class IndexRecyclerViewAdapter extends RecyclerView.Adapter<IndexRecycler
                 menu.showAsDropDown(holder.menu, -menuW + offx, -offy);
             }
         });
-        //横向列表
-        LinearLayoutManager manager = new LinearLayoutManager(mContext);
-        manager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        holder.liveList.setLayoutManager(manager);
-        IndexLiveHListAdapter adapter = new IndexLiveHListAdapter(datas);
-        holder.liveList.setAdapter(adapter);
+        //加载
+        Problem problem = problemList.get(getRealPosition(holder));
+        holder.problemTitleText.setText(problem.getPTitle());
+        holder.problemContentText.setText(problem.getPContent());
     }
 
     @Override
@@ -107,36 +113,40 @@ public class IndexRecyclerViewAdapter extends RecyclerView.Adapter<IndexRecycler
 
     @Override
     public int getItemCount() {
-        return headView == null ? datas.size() : datas.size() + 1;
+        return headView == null ? problemList.size() : problemList.size() + 1;
     }
 
-    //刷新更新数据
-    public void addItem(List<String> newDatas){
-           newDatas.addAll(datas);
-           datas.removeAll(newDatas);
-           datas.addAll(newDatas);
-           notifyDataSetChanged();
-    }
-
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView text;
+    public class MyViewHolder extends RecyclerView.ViewHolder implements  View.OnClickListener{
+        private MyItemClickListener mListener;
+        //标题
+        TextView problemTitleText;
+        //内容
+        TextView problemContentText;
+        //menu
         ImageView menu;
+        //头像
         CircleImageView profile_pic;
-        ImageView pic;
         LinearLayout normalShell;
-        RecyclerView liveList;
 
-        public MyViewHolder(View itemView) {
+        public MyViewHolder(View itemView,MyItemClickListener myItemClickListener) {
             super(itemView);
             if (itemView == headView) return;
-            text = (TextView) itemView.findViewById(R.id.text);
-            menu = (ImageView) itemView.findViewById(R.id.menu);
-            profile_pic = (CircleImageView) itemView.findViewById(R.id.profile_image);
+            this.mListener = myItemClickListener;
+            itemView.setOnClickListener(this);
+            problemTitleText = (TextView) itemView.findViewById(R.id.recommend_problem_title);
+            menu = (ImageView) itemView.findViewById(R.id.answer_menu);
+            profile_pic = (CircleImageView) itemView.findViewById(R.id.answer_profile_image);
+            problemContentText=(TextView)itemView.findViewById(R.id.recommend_problem_content);
             normalShell = (LinearLayout) itemView.findViewById(R.id.normalList);
-            liveList = (RecyclerView) itemView.findViewById(R.id.liveList);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (mListener != null) {
+                mListener.onItemClick(v, getAdapterPosition()-1);
+            }
         }
     }
-
 
     public void setHeadView(View view) {
         headView = view;

@@ -26,7 +26,7 @@
 
             <ImageView
                 android:visibility="invisible"
-                android:id="@+id/menu"
+                android:id="@+id/answer_menu"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentRight="true"
@@ -34,7 +34,7 @@
 
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profile_image"
+                android:id="@+id/answer_profile_image"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_centerVertical="true"
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/profile_image"
+                android:layout_toRightOf="@id/answer_profile_image"
                 android:text="jacky"
                 android:textSize="15sp" />
         </RelativeLayout>

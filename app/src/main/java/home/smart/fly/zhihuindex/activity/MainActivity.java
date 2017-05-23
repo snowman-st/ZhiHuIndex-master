@@ -8,8 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.AppBarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
-import android.view.MotionEvent;
+import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -21,7 +20,7 @@ import java.util.List;
 
 import home.smart.fly.zhihuindex.R;
 import home.smart.fly.zhihuindex.adapter.FragmentTabAdapter;
-import home.smart.fly.zhihuindex.fragments.FourFragment;
+import home.smart.fly.zhihuindex.fragments.SettingFragment;
 import home.smart.fly.zhihuindex.fragments.IndexFragment;
 import home.smart.fly.zhihuindex.fragments.SecondFragment;
 
@@ -76,8 +75,7 @@ public class MainActivity extends FragmentActivity {
 
         fragments.add(new IndexFragment());
         fragments.add(new SecondFragment());
-        fragments.add(new FourFragment());
-
+        fragments.add(new SettingFragment());
         FragmentTabAdapter tabAdapter = new FragmentTabAdapter(this, fragments, R.id.content, rgs);
         tabAdapter.setOnRgsExtraCheckedChangedListener(new FragmentTabAdapter.OnRgsExtraCheckedChangedListener() {
             @Override
@@ -104,6 +102,7 @@ public class MainActivity extends FragmentActivity {
         });
     }
 
+    //隐藏搜索栏
     private void resetView() {
         index_app_bar.setVisibility(View.GONE);
     }
@@ -117,4 +116,5 @@ public class MainActivity extends FragmentActivity {
             super.onBackPressed();
         }
     }
+
 }

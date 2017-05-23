@@ -1,56 +1,54 @@
-package home.smart.fly.zhihuindex.util;
-
-import java.util.Date;
+package home.smart.fly.zhihuindex;
 
 /**
  * Created by zl on 2017/5/16.
  */
 
 public class Problem {
-    //问题的Id
-    private int qId;
-    //问题内容
-    private String qContent;
-    //问题标题
-    private String pTitle;
-    //问题日期
-    private Date pDate;
-    //父节点
-    private int parentId;
-    //根节点
-    private int rootId;
     //用户节点
     private int belongUserId;
+    //问题内容
+    private String pContent;
+    //问题日期
+    private String pDate;
+    //问题的Id
+    private int pId;
+    //问题标题
+    private String pTitle;
     //问题类型
     private String pType;
+    //父节点
+    private int parentId;
     //标志
     private boolean refresh_flag;
-    public Problem(int qId, String content, String pTitle,Date pDate, int parentId, int rootId, int userId, String pType, boolean flag){
-           this.qId =qId;
-           this.qContent=content;
+    //根节点
+    private int rootId;
+    public Problem(int pId,String pTitle, String content, String pDate, int parentId, int rootId, int belongUserId, String pType, boolean refresh_flag){
+           this.pId = pId;
            this.pTitle=pTitle;
+           this.pContent=content;
            this.pDate =pDate;
            this.parentId =parentId;
            this.rootId =rootId;
-           this.belongUserId =userId;
-           this.refresh_flag=flag;
+           this.pType=pType;
+           this.belongUserId =belongUserId;
+           this.refresh_flag=refresh_flag;
     }
 
-
     public int getQId(){
-        return qId;
+        return pId;
     }
 
     public void setQId(int qId){
-        this.qId =qId;
+        this.pId =qId;
     }
 
     public String getPContent(){
-        return qContent;
+        return pContent;
     }
 
     public void setPContent(String content){
-        this.qContent=content;
+        this.pContent=content;
     }
 
     public String getPTitle(){
@@ -61,11 +59,11 @@ public class Problem {
         this.pTitle =  pTitle;
     }
 
-    public Date getpDate(){
+    public String getpDate(){
         return pDate;
     }
 
-    public void setPDate(Date pDate){this.pDate =pDate;}
+    public void setPDate(String pDate){this.pDate =pDate;}
 
     public int getParentId(){
         return parentId;

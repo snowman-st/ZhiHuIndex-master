@@ -9,11 +9,19 @@
         android:layout_height="?attr/actionBarSize"></android.support.v7.widget.Toolbar>
 
     <EditText
-        android:id="@+id/problem"
+        android:id="@+id/problem_title"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:hint="@string/problem_title"
+        android:background="@android:drawable/edit_text"
+        />
+
+    <EditText
+        android:id="@+id/problem_content"
         android:layout_width="match_parent"
         android:layout_height="160dp"
         android:gravity="top"
-        android:hint="@string/problem"
+        android:hint="@string/problem_content"
         android:background="@android:drawable/edit_text"
         />
 </LinearLayout>

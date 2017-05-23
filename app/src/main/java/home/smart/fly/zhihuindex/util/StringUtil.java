@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
  */
 
 public class StringUtil {
+    //将输入流转化为String
     public static String StreamToString(InputStream in){
         String str =null;
         StringBuilder sb = new StringBuilder();

@@ -4,7 +4,9 @@
     <string name="live_title">世间所有的相遇，都是久别重逢</string>
     <string name="search">搜索问题</string>
     <string name="comment">评论</string>
-    <string name="problem">提问</string>
+    <string name="problem_content">提问</string>
+    <string name="problem_title">标题</string>
+    <string name="send">发送</string>
     <string name="large_text">
         "假如生活欺骗了你"
         "假如生活欺骗了你，"

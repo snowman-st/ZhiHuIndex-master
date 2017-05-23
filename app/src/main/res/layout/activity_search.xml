@@ -13,35 +13,6 @@
         android:queryHint="@string/search"
         android:imeOptions="actionSearch"
         ></SearchView>
-    <!--<RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        app:layout_scrollFlags="scroll|enterAlways"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        >
-
-        <ImageView
-            android:id="@+id/search_image"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/ic_search" />
-
-        <EditText
-            android:id="@+id/edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@id/search_image"
-            android:hint="@string/search"
-            android:textSize="16sp"
-            android:clickable="true"/>
-
-    </RelativeLayout>-->
 
     <ScrollView
         android:layout_width="wrap_content"

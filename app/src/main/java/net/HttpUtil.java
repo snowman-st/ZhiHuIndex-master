@@ -2,18 +2,17 @@ package net;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.List;
 
-import home.smart.fly.zhihuindex.util.Problem;
+import home.smart.fly.zhihuindex.util.GsonTool;
+import home.smart.fly.zhihuindex.Problem;
 import home.smart.fly.zhihuindex.util.StringUtil;
 
 /**
@@ -21,30 +20,37 @@ import home.smart.fly.zhihuindex.util.StringUtil;
  */
 
 public class HttpUtil {
-       private  HttpURLConnection connection = null;
-       private  URL url = null;
-       private  InputStream in = null;
-       private  BufferedReader bReader = null;
-       private  String response;
+    private static InputStream in = null;
+    private static List<Problem> problemList=null;
+    private static HttpURLConnection connection = null;
 
-       //发送请求，并获得一些数据
-       public void sendWithHttp(final URL urlAddress, final String problem){
+    //发送post请求，并获得一些数据
+    public static List<Problem> sendWithHttp(final URL urlAddress,final String problemJson){
           new Thread(new Runnable() {
             @Override
             public void run() {
-                url = urlAddress;
+                URL url = urlAddress;
                 try{
+                    //打开链接
                     connection = (HttpURLConnection)url.openConnection();
+                    //POST请求
                     connection.setRequestMethod("POST");
+                    //允许此链接输入输出
                     connection.setDoOutput(true);
+                    connection.setDoInput(true);
                     connection.setRequestProperty("Charset", "UTF-8");
+                    connection.connect();
+                    //获得输出流
                     DataOutputStream dos = new DataOutputStream(connection.getOutputStream());
-                    dos.writeBytes(problem);
+                    //传送Json数据
+                    dos.writeBytes(problemJson);
                     dos.flush();
                     dos.close();
                     //如果成功
                     if(connection.getResponseCode()==200){
-                          getResponse();
+                          String str =getResponse();
+                          //获得返回数据
+                          problemList = GsonTool.getList(str);
                     }
                 }catch(Exception e){
                     e.printStackTrace();
@@ -56,29 +62,10 @@ public class HttpUtil {
                 }
             }
           }).start();
+           return problemList;
        }
 
-        //获得数据
-        public String getWithHttp(final URL urlAddress){
-           new Thread(new Runnable() {
-               @Override
-               public void run() {
-                   url = urlAddress;
-                   try{
-                       connection = (HttpURLConnection)url.openConnection();
-                       connection.setRequestMethod("GET");
-                       if(connection.getResponseCode()==200){
-                          response=getResponse();
-                       }
-                   }catch(Exception e){
-                       e.printStackTrace();
-                   }
-               }
-           });
-            return response;
-        }
-
-        private String getResponse(){
+        private static String getResponse(){
             String str =null;
             try{
                 in = new BufferedInputStream(connection.getInputStream());

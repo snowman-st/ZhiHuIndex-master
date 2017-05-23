@@ -3,7 +3,7 @@
     xmlns:appcompat="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/problem_commit"
-        android:title="@string/problem"
+        android:title="@string/problem_content"
         android:icon="@drawable/problem_commit"
         appcompat:showAsAction="always">
     </item>

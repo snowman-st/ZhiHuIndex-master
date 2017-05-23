@@ -7,8 +7,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.SearchView;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -20,11 +22,22 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import net.HttpUtil;
+
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import home.smart.fly.zhihuindex.R;
 import home.smart.fly.zhihuindex.database.RecordSQLiteOpenHelper;
+import home.smart.fly.zhihuindex.util.GsonTool;
+import home.smart.fly.zhihuindex.Problem;
 
 /**
  * Created by zl on 2017/5/5.
+ * 搜索界面
  */
 
 public class SearchActivity extends AppCompatActivity {
@@ -35,6 +48,9 @@ public class SearchActivity extends AppCompatActivity {
     private SQLiteDatabase db;
     private BaseAdapter adapter;
     private SearchView searchView;
+    private String str =null;
+    private List<Problem> problemList = new ArrayList<Problem>();
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,21 +73,50 @@ public class SearchActivity extends AppCompatActivity {
                 return true;
             }
         });
+        //searchView的文本事件
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if(searchView.getQuery().length()!=0){
+                if(query.length()!=0){
                     //隐藏键盘
                     ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
                             getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                    String str = searchView.getQuery().toString().trim();
+                    str = query.trim();
                     boolean hasData = (hasData(str));
                     //如果搜索历史不存在，则存储
                     if(!hasData) insertData(str);
                     queryData(str);
-                    Intent intent = new Intent();
-                    //intent.setClass(SearchActivity.this,AnswerActivity.class);
-                    //startActivity(intent);
+                    new Handler().post(new Runnable() {
+                        @Override
+                        public void run() {
+                            try{
+                                //参见IndexFragment
+                                URL url = new URL("http://192.168.1.106:8080/HelloServer/servlet/SerachServlet");
+                                Problem problem = new Problem(1,null,str,new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),1,1,1,null,true);
+                                List<Problem> newProblemList = new ArrayList<Problem>();
+                                newProblemList.add(problem);
+                                String list = GsonTool.createListJsonString(newProblemList);
+                                Log.v("SearchActivity1",list);
+                                //获得的答案列表
+                                newProblemList = HttpUtil.sendWithHttp(url,list);
+                                Log.v("SearchActivity2",GsonTool.createListJsonString(newProblemList));
+                                if(newProblemList!=null&&newProblemList.size()> 0){
+                                    Log.v("SearchActivity3",list);
+                                    Intent intent = new Intent();
+                                    String s = GsonTool.createListJsonString(newProblemList);
+                                    //传送搜索结果
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("SearchActivity",s);
+                                    intent.putExtras(bundle);
+                                    intent.setClass(SearchActivity.this,AnswerListActivity.class);
+                                    startActivity(intent);
+                                }
+                                else Toast.makeText(SearchActivity.this,"无法搜索！",Toast.LENGTH_SHORT).show();
+                            }catch(Exception e){
+                                e.printStackTrace();
+                            }
+                        }
+                    });
                 }
                 else Toast.makeText(SearchActivity.this,"搜索内容不能为空",Toast.LENGTH_SHORT).show();
                 return false;
@@ -96,7 +141,6 @@ public class SearchActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 TextView textView = (TextView) view.findViewById(android.R.id.text1);
                 String name = textView.getText().toString();
-                //et_search.setText(name);
                 searchView.setQuery(name,true);
             }
         });
@@ -121,7 +165,6 @@ public class SearchActivity extends AppCompatActivity {
                 builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                     }
                 });
                 builder.create().show();
@@ -167,5 +210,6 @@ public class SearchActivity extends AppCompatActivity {
             tv_tip=(TextView)findViewById(R.id.tv_tip);
             tv_clear=(TextView)findViewById(R.id.tv_clear);
             listview=(ListView)findViewById(R.id.listView);
+            listview.setTextFilterEnabled(true);
     }
 }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray"
@@ -25,7 +24,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/menu"
+                android:id="@+id/answer_menu"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_alignParentRight="true"
@@ -33,20 +32,20 @@
 
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profile_image"
+                android:id="@+id/answer_profile_image"
                 android:layout_width="18dp"
                 android:layout_height="18dp"
                 android:layout_centerVertical="true"
                 android:src="@drawable/profile" />
 
             <TextView
+                android:id="@+id/recommend_problem_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/profile_image"
-                android:text="来自话题：社会"
-                android:textSize="15sp" />
+                android:layout_toRightOf="@id/answer_profile_image"
+                android:textSize="25sp" />
         </RelativeLayout>
 
 
@@ -58,13 +57,13 @@
 
 
             <TextView
-                android:id="@+id/recommend"
+                android:id="@+id/recommend_problem_content"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 android:layout_margin="12dp"
+                android:textStyle="bold"
+                android:textSize="@dimen/dp32"
                 />
-
-                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -105,14 +104,6 @@
             </LinearLayout>
 
         </LinearLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/liveList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="12dp"
-            android:visibility="gone" />
-
 
     </LinearLayout>
 
