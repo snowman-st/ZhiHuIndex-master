@@ -70,7 +70,7 @@ public class ProblemCommitActivity extends AppCompatActivity{
                         String commit = GsonTool.createListJsonString(problemList);
                         Log.v("ProblemCommitActivity",commit);
                         try{
-                            URL url = new URL("http://192.168.1.107:8080/HelloServer/servlet/LoginServlet");
+                            URL url = new URL("http://192.168.1.105:8080/HelloServer/servlet/LoginServlet");
                             HttpUtil.sendWithHttp(url,commit);
                         }catch (Exception e){
                             e.printStackTrace();

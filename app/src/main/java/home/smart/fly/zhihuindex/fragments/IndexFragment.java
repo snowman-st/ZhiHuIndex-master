@@ -28,13 +28,18 @@ import java.util.Date;
 import java.util.List;
 
 import home.smart.fly.zhihuindex.R;
+import home.smart.fly.zhihuindex.User;
 import home.smart.fly.zhihuindex.activity.AnswerActivity;
 import home.smart.fly.zhihuindex.activity.ProblemCommitActivity;
 import home.smart.fly.zhihuindex.adapter.IndexRecyclerViewAdapter;
 import home.smart.fly.zhihuindex.Problem;
+import home.smart.fly.zhihuindex.settings.UserInf;
+import home.smart.fly.zhihuindex.settings.loginActivity;
 import home.smart.fly.zhihuindex.util.GsonTool;
+import home.smart.fly.zhihuindex.activity.MainActivity;
 
 public class IndexFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
+
     private  final int UPDATE =1;
     private Context mContext;
     private SwipeRefreshLayout swipeRefreshLayout;
@@ -46,6 +51,8 @@ public class IndexFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     private FloatingActionButton askQuestion;
     private List<Problem> recommendedProblemList = new ArrayList<Problem>();
     private Problem problem;
+    UserInf use =null;
+
 
     private Handler handler = new Handler(){
         @Override
@@ -76,6 +83,7 @@ public class IndexFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     private void InitView() {
+        use = (UserInf)getActivity().getApplication();
         //悬浮按钮
         fam = (FloatingActionMenu) rootView.findViewById(R.id.menu_yellow);
         //提问
@@ -84,9 +92,18 @@ public class IndexFragment extends Fragment implements SwipeRefreshLayout.OnRefr
         askQuestion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(getActivity(),ProblemCommitActivity.class);
-                startActivity(intent);
+                if(!MainActivity.logstate){
+                    Log.v("IndexFragment","hahha");
+                    Intent inten = new Intent(getActivity(),loginActivity.class);
+                    startActivity(inten);
+                }
+
+                else{
+                    Intent intent = new Intent();
+                    intent.setClass(getActivity(),ProblemCommitActivity.class);
+                    startActivity(intent);
+                }
+
             }
         });
         View headView = LayoutInflater.from(mContext).inflate(R.layout.index_list_headview, null);
@@ -145,7 +162,7 @@ public class IndexFragment extends Fragment implements SwipeRefreshLayout.OnRefr
             @Override
             public void run() {
                 try{
-                    URL url = new URL("http://192.168.1.106:8080/HelloServer/servlet/LoginServlet");
+                    URL url = new URL("http://192.168.1.107:8080/HelloServer/servlet/LoginServlet");
                     //新建List<Problem>,用于传输数据
                     List<Problem> newProblemList = new ArrayList<Problem>();
                     newProblemList.add(new Problem(1,null,null,new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()),0,0,0,"home_page",true));

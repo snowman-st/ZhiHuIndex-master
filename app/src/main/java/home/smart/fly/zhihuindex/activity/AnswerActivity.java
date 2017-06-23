@@ -97,6 +97,7 @@ public class AnswerActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.v("Answerjcsnsdnc","dcnsdlvlsdnvsdlvnsldvn");
                 String str = messageText.getText().toString();
                 if(str!=null){
                     update(str);

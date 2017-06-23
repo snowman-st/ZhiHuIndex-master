@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_vertical"
+    android:stretchColumns="0">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="账 号:"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:hint="请输入账号"
+            android:textSize="24sp"
+            android:maxLines="1"
+            android:layout_weight="3"
+            />
+
+        <EditText
+            android:id="@+id/account"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:textSize="20sp"
+            android:maxLines="1"
+            />
+        <TextView android:layout_weight="1"/>
+    </TableRow>
+
+    <TableRow android:layout_marginTop="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:text="密 码:"
+            android:gravity="center"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:hint="8-16位密码"
+            android:maxLines="1"
+            android:textSize="24sp"
+            android:layout_weight="3"
+            />
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:minWidth="220sp"
+            android:textSize="20sp"
+            android:inputType="textPassword"
+            android:layout_weight="6"
+            />
+        <TextView android:layout_weight="1"/>
+    </TableRow>
+
+
+    <TableRow
+        android:layout_gravity="bottom"
+        >
+        <TextView
+            android:id="@+id/findpawd"
+            android:layout_gravity="right"
+            android:text="找回密码    "
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:clickable="true"
+            />
+    </TableRow>
+    <TableRow  android:layout_marginTop="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center">
+
+            <Button
+            android:id="@+id/login"
+            android:text="登    录"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textColor="@color/white"
+            android:background="@color/colorPrimary"
+            android:textSize="22sp"
+            />
+        <TextView
+            android:layout_width="100sp"
+            android:layout_height="wrap_content" />
+            <Button
+                android:id="@+id/regist"
+                android:text="注    册"
+                android:textColor="@color/white"
+                android:background="@color/colorPrimary"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:textSize="22sp"
+                />
+        </LinearLayout>
+    </TableRow>
+
+</TableLayout>

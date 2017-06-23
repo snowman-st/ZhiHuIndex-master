@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -29,6 +30,7 @@ public class SettingFragment extends Fragment {
     private FloatingActionButton fab;
     private static final String picUrl = "http://img1.imgtn.bdimg.com/it/u=3743691986,2983459167&fm=21&gp=0.jpg";
 
+    private TextView tv ;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -55,6 +57,7 @@ public class SettingFragment extends Fragment {
         });
         CircleImageView view = (CircleImageView) rootView.findViewById(headview);
         Glide.with(mContext).load(picUrl).placeholder(R.drawable.profile).into(view);
+
 
     }
 }

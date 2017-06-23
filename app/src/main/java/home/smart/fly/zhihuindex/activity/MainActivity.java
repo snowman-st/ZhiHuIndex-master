@@ -28,6 +28,8 @@ import home.smart.fly.zhihuindex.fragments.SecondFragment;
  * Created by co-mall on 2016/9/13.
  */
 public class MainActivity extends FragmentActivity {
+    public static boolean logstate = false;
+
     private final String TAG = MainActivity.class.getSimpleName();
     private Context mContext;
     private FrameLayout content;
